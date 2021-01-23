@@ -3,3 +3,4 @@ android/.gradle/
 android/app/build/
 
 package-lock.json
+android/.idea/

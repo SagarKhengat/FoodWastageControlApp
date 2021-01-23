@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-               BuildableName = "FoodWastageControl-tvOS.app"
-               BlueprintName = "FoodWastageControl-tvOS"
-               ReferencedContainer = "container:FoodWastageControl.xcodeproj">
+               BuildableName = "FoodWastageControlApp-tvOS.app"
+               BlueprintName = "FoodWastageControlApp-tvOS"
+               ReferencedContainer = "container:FoodWastageControlApp.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "2D02E48F1E0B4A5D006451C7"
-               BuildableName = "FoodWastageControl-tvOSTests.xctest"
-               BlueprintName = "FoodWastageControl-tvOSTests"
-               ReferencedContainer = "container:FoodWastageControl.xcodeproj">
+               BuildableName = "FoodWastageControlApp-tvOSTests.xctest"
+               BlueprintName = "FoodWastageControlApp-tvOSTests"
+               ReferencedContainer = "container:FoodWastageControlApp.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "FoodWastageControl-tvOS.app"
-            BlueprintName = "FoodWastageControl-tvOS"
-            ReferencedContainer = "container:FoodWastageControl.xcodeproj">
+            BuildableName = "FoodWastageControlApp-tvOS.app"
+            BlueprintName = "FoodWastageControlApp-tvOS"
+            ReferencedContainer = "container:FoodWastageControlApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "2D02E47A1E0B4A5D006451C7"
-            BuildableName = "FoodWastageControl-tvOS.app"
-            BlueprintName = "FoodWastageControl-tvOS"
-            ReferencedContainer = "container:FoodWastageControl.xcodeproj">
+            BuildableName = "FoodWastageControlApp-tvOS.app"
+            BlueprintName = "FoodWastageControlApp-tvOS"
+            ReferencedContainer = "container:FoodWastageControlApp.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

@@ -130,7 +130,7 @@ android {
     }
 
     defaultConfig {
-        applicationId "com.foodwastagecontrol"
+        applicationId "com.FoodWastageControlApp"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
