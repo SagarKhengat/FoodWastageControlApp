@@ -13,11 +13,25 @@ import {
   Modal,
   Keyboard
 } from 'react-native';
-import styles from '../../style/styles';
 
 const { height: SCREEN_HEIGHT, width: SCREEN_WIDTH } = Dimensions.get('window');
 
-
+const styles = StyleSheet.create({
+  wrapper: {
+    backgroundColor: 'white'
+  },
+  transparent: {
+    zIndex: 2,
+    backgroundColor: 'rgba(0,0,0,0)'
+  },
+  absolute: {
+    position: 'absolute',
+    top: 0,
+    bottom: 0,
+    left: 0,
+    right: 0
+  }
+});
 export default class ModalBox extends React.PureComponent {
   static propTypes = {
     isOpen: PropTypes.bool,
