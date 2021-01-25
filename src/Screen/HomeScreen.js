@@ -5,13 +5,17 @@ import {
   TouchableOpacity,
   FlatList,
   RefreshControl,
-  Alert
+  Alert,
+  StyleSheet,
+  Dimensions,
+  Image
 
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons'
 import AsyncStorage from '@react-native-community/async-storage';
 
-
+const window = Dimensions.get("screen");
+const height = window.height;
 class ListItem extends Component {
   constructor(props) {
     super(props);
@@ -37,15 +41,21 @@ class ListItem extends Component {
 
                 <Image
                   style={styles.image100}
-                  source={{ uri: item.imagePath }}
+                  source={{ uri: item.userImagePath }}
                   resizeMode={'stretch'}
                 />
 
               </View>
               <View style={styles.cardText}>
-                <Text style={styles.cardTitleText}>{item.title}</Text>
+                <Text style={styles.cardTitleText}>{item.foodName}</Text>
                 <View>
-                  <Text style={styles.cardDetailText}>{item.details}</Text>
+                  <Text style={styles.cardDetailText}>{item.foodAmount}</Text>
+                </View>
+                <View>
+                  <Text style={styles.cardDetailText}>{'Submitted By: '}{item.userName ? item.userName : ''}</Text>
+                </View>
+                <View>
+                  <Text style={styles.cardDetailText}>{'Status: '}{item.requestState === 'Pending' ? <Text style={[styles.cardDetailText, { color: '#307ecc' }]}>{'Pending'}</Text> : item.requestState === 'Processed' ? <Text style={[styles.cardDetailText, { color: 'green' }]}>{'Processed'}</Text> : <Text style={[styles.cardDetailText, { color: 'red' }]}>{'Declined'}</Text>}</Text>
                 </View>
               </View>
             </View>
@@ -87,23 +97,44 @@ export default class HomeScreen extends Component<{}> {
 
 
   componentDidMount() {
-    // this.fetchUserId();
-    //   this.props.navigation.addListener('willFocus', (playload)=>{
+    this.props.navigation.addListener('willFocus', (payload) => {
 
-    //       if(!this.state.isLoading){
-    //       this.onReVisit();
-    //       }
-    //   });
+      var arr = [];
+      AsyncStorage.getItem('userObject')
+        .then(userObject => {
+          this.setState({
+            userObject: userObject
+          })
+          AsyncStorage.getItem('allRequests')
+            .then(allRequests => {
+              if (allRequests) {
+                var requests = JSON.parse(allRequests);
+                console.log(">>>>>>>>>>>>>", requests)
+                for (let index = 0; index < requests.length; index++) {
+                  const element = requests[index];
+                  if (userObject.user_type === 'NGO') {
+                    if (element.NGOEmail === userObject.user_email) {
+                      arr.push(element)
+                    }
+                  } else {
+                    if (element.userEmail === userObject.user_email) {
+                      arr.push(element)
+                    }
+                  }
+                }
+                this.setState({
+                  data: arr
+                })
+              }
 
-    AsyncStorage.getItem('userObject')
-      .then(userObject => {
+            });
 
-        console.log(">>>>>>>>>>>>>>>>>", userObject);
-      });
+        });
+    });
   }
 
 
-  _keyExtractor = (item, index) => item.id ? item.id : item._id;
+  _keyExtractor = (item, index) => index.toString();
 
   _renderItem = ({ item, index }) =>
 
@@ -120,7 +151,7 @@ export default class HomeScreen extends Component<{}> {
 
 
   _onPressItem = (item) => {
-
+    this.props.navigation.navigate('viewRequestUser', { request: item })
   };
 
 
@@ -133,7 +164,7 @@ export default class HomeScreen extends Component<{}> {
 
       <View style={{ flex: 1, backgroundColor: '#efece8' }}>
         <FlatList
-          data={this.state.huntData}
+          data={this.state.data}
           keyExtractor={this._keyExtractor}
           renderItem={this._renderItem}
           removeClippedSubviews
@@ -145,15 +176,6 @@ export default class HomeScreen extends Component<{}> {
               <Text >No requests found.</Text>
             </View>
             : null}
-          refreshControl={
-            <RefreshControl
-              refreshing={this.state.isFetching}
-              // onRefresh={this.onRefresh}
-              title="Loading.."
-              tintColor="#3f4239"
-              titleColor="#f48619"
-              colors={["#3f4239"]}
-            />}
         />
         <TouchableOpacity
           style={{
@@ -190,3 +212,88 @@ export default class HomeScreen extends Component<{}> {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  cardContainer: {
+    backgroundColor: '#FFFFFF',
+    padding: 7,
+    elevation: 2,
+    borderRadius: 2
+  },
+  cardItemContainer: {
+    flexDirection: 'row',
+    justifyContent: 'space-between'
+  },
+  cardImage: {
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    alignItems: "flex-start",
+    margin: '1%',
+    borderRadius: 10
+  },
+  image100: {
+    width: 100,
+    height: 100,
+    borderRadius: 10
+  },
+  cardText: {
+    flex: 1,
+    flexDirection: 'column',
+    alignSelf: 'flex-start',
+    paddingLeft: 15,
+    margin: '1%'
+  },
+  cardTitleText: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333'
+  },
+  cardDetailText: {
+    fontSize: 14,
+    color: '#333'
+  },
+  listSeparator: {
+    height: 7,
+  },
+  dashboardListContainerPadding: {
+    paddingTop: 15,
+    paddingLeft: 7,
+    paddingRight: 7,
+  },
+  dashboardModal: {
+    height: null,
+    width: '90%',
+    borderRadius: 6,
+  },
+  dashboardModalUpperPart: {
+    flexDirection: "row",
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginLeft: 12,
+    height: 35
+  },
+  dashboardModalCloseButton: {
+    flex: 1,
+    justifyContent: 'flex-end',
+    alignItems: 'flex-end',
+    paddingRight: 12
+  },
+  image25: {
+    width: 25,
+    height: 25,
+    borderRadius: 1
+  },
+  dashboardModalMainImageContainer: {
+    width: '100%',
+    height: height / 1.4
+  },
+  dashboardModalMainImage: {
+    height: height / 1.7
+  },
+  dashboardModalTextContainer: {
+    flexDirection: 'column',
+    alignSelf: 'flex-start',
+    margin: '1%',
+    paddingLeft: 15
+  },
+})

@@ -68,7 +68,7 @@ const imagePickerOptions = {
     enableRotationGesture: false,
     compressImageQuality: 0.8,
 }
-export default class AddRequest extends Component<{}> {
+export default class ViewRequestNGO extends Component<{}> {
     constructor(props) {
         super(props);
         this.state = {
@@ -261,144 +261,108 @@ export default class AddRequest extends Component<{}> {
 
         return (
 
-            !this.state.success ? <ScrollView style={{ flex: 1, backgroundColor: '#efece8' }}>
+            !this.state.success ?
+                <ScrollView style={{ flex: 1, backgroundColor: '#efece8' }}>
+                    <View style={[styles.SectionStyle]}>
+                        <Text style={styles.inputTextStyle}>Request Status:</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(foodname) => this.setState({ foodname: foodname })}
+                            underlineColorAndroid="#f000"
+                            placeholderTextColor="#8b9cb5"
+                            editable={false}
+                        >{this.state.request.requestState}</TextInput>
 
-                <View style={[{
-                    alignSelf: 'center',
-                    marginTop: 1,
-                    marginBottom: 10,
-                    marginLeft: 35,
-                    marginRight: 35,
-                    flexDirection: 'row',
-                }]}>
-                    <Dropdown
-                        style={{}}
-                        containerStyle={{ height: 60, width: '80%' }}
-                        labelFontSize={14}
-                        labelTextStyle={{ color: '#333' }}
-                        fontSize={14}
-                        baseColor={'#333'}
-                        label='Select Event Type'
-                        value={this.state.selectedEventType}
-                        onChangeText={(selectedEventType) => {
-                            this.setState({
-                                selectedEventType: selectedEventType
-                            })
-                        }}
-                        data={[
-                            {
-                                value: 'NORMAL PARTY',
-                            }, {
-                                value: 'BIRTHDAY PARTY',
-                            },
-                            {
-                                value: 'CULTURAL EVENT',
-                            }, {
-                                value: 'WEDDING CEREMONY',
-                            },
-                            {
-                                value: 'INOGORATION',
-                            }
-                        ]}
-                    />
-                </View>
-                <View style={styles.SectionStyle}>
+                    </View>
 
-                    <TextInput
-                        style={styles.inputStyle}
-                        onChangeText={(foodname) => this.setState({ foodname: foodname })}
-                        underlineColorAndroid="#f000"
-                        placeholder="Enter food to be denoted"
-                        placeholderTextColor="#8b9cb5"
-                    />
-                </View>
-                <View style={styles.SectionStyle}>
+                    <View style={styles.SectionStyle}>
+                        <Text style={styles.inputTextStyle}>Event Type:</Text>
 
-                    <TextInput
-                        style={styles.inputStyle}
-                        onChangeText={(foodamount) => this.setState({ foodamount: foodamount })}
-                        underlineColorAndroid="#f000"
-                        placeholder="Enter amount of food"
-                        placeholderTextColor="#8b9cb5"
-                    />
-                </View>
-                <View style={[{
-                    alignSelf: 'center',
-                    marginTop: 7,
-                    marginBottom: 10,
-                    marginLeft: 35,
-                    marginRight: 35,
-                    flexDirection: 'row',
-                }]}>
-                    <Dropdown
-                        style={{}}
-                        containerStyle={{ height: 60, width: '80%' }}
-                        labelFontSize={14}
-                        labelTextStyle={{ color: '#333' }}
-                        fontSize={14}
-                        baseColor={'#333'}
-                        label='Select NGO'
-                        value={this.state.selectedNgo}
-                        onChangeText={(selectedNgo) => {
-                            this.setState({
-                                selectedNgo: selectedNgo
-                            }, () => {
-                                for (let index = 0; index < this.state.originalNgoArr.length; index++) {
-                                    const element = this.state.originalNgoArr[index];
-                                    if (element.user_name === this.state.selectedNgo) {
-                                        this.setState({
-                                            ngoEmail: element.user_email,
-                                            ngoContact: element.user_mob,
-                                            ngoAdd: element.user_address,
-                                            selectedNgoObj: element
-                                        })
-                                    }
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(foodname) => this.setState({ foodname: foodname })}
+                            underlineColorAndroid="#f000"
+                            placeholderTextColor="#8b9cb5"
+                            editable={false}
+                            multiline
+                            numberOfLines={2}
+                        >{this.state.request.eventType}</TextInput>
+                    </View>
+                    <View style={[styles.SectionStyle, { height: null }]}>
+                        <Text style={styles.inputTextStyle}>Food Name:</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(foodname) => this.setState({ foodname: foodname })}
+                            underlineColorAndroid="#f000"
+                            placeholderTextColor="#8b9cb5"
+                            editable={false}
+                            multiline
+                            numberOfLines={2}
+                        >{this.state.request.foodName}</TextInput>
+                    </View>
+                    <View style={styles.SectionStyle}>
+                        <Text style={styles.inputTextStyle}>Food Amount:</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(foodamount) => this.setState({ foodamount: foodamount })}
+                            underlineColorAndroid="#f000"
+                            placeholderTextColor="#8b9cb5"
+                            editable={false}
+                        >{this.state.request.foodAmount}</TextInput>
+                    </View>
+                    <View style={styles.SectionStyle}>
+                        <Text style={styles.inputTextStyle}>Date:</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(foodname) => this.setState({ foodname: foodname })}
+                            underlineColorAndroid="#f000"
+                            placeholderTextColor="#8b9cb5"
+                            editable={false}
+                        >{moment(this.state.request.dateTime).format('DD-MMM-YYYY')}</TextInput>
+                    </View>
+                    {this.state.NGO ? <View style={[styles.SectionStyle, { height: null }]}>
+                        <Text style={styles.inputTextStyle}>NGO Email:</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(ngoEmail) => this.setState({ ngoEmail: ngoEmail })}
+                            underlineColorAndroid="#f000"
+                            placeholderTextColor="#8b9cb5"
+                            editable={false}
+                            multiline
+                            numberOfLines={2}
 
-                                }
-                            })
-                        }}
-                        data={this.state.ngoArr}
-                    />
-                </View>
-                {this.state.selectedNgo === '' ? null : <View style={styles.SectionStyle}>
+                        >{this.state.NGO.user_email}</TextInput>
+                    </View> : null}
+                    {this.state.NGO ? <View style={styles.SectionStyle}>
+                        <Text style={styles.inputTextStyle}>NGO Mob No:</Text>
 
-                    <TextInput
-                        style={styles.inputStyle}
-                        onChangeText={(ngoEmail) => this.setState({ ngoEmail: ngoEmail })}
-                        underlineColorAndroid="#f000"
-                        placeholderTextColor="#8b9cb5"
-                        editable={false}
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(ngoContact) => this.setState({ ngoContact: ngoContact })}
+                            underlineColorAndroid="#f000"
+                            placeholderTextColor="#8b9cb5"
+                            editable={false}
 
-                    >{this.state.ngoEmail}</TextInput>
-                </View>}
-                {this.state.selectedNgo === '' ? null : <View style={styles.SectionStyle}>
+                        >{this.state.NGO.user_mob}</TextInput>
+                    </View> : null}
+                    {this.state.NGO ? <View style={[styles.SectionStyle, { height: null }]}>
+                        <Text style={styles.inputTextStyle}>NGO Addr:</Text>
+                        <TextInput
+                            style={styles.inputStyle}
+                            onChangeText={(ngoAdd) => this.setState({ ngoAdd: ngoAdd })}
+                            underlineColorAndroid="#f000"
+                            placeholderTextColor="#8b9cb5"
+                            editable={false}
+                            multiline
+                            numberOfLines={5}
+                        >{this.state.NGO.user_address}</TextInput>
+                    </View> : null}
 
-                    <TextInput
-                        style={styles.inputStyle}
-                        onChangeText={(ngoContact) => this.setState({ ngoContact: ngoContact })}
-                        underlineColorAndroid="#f000"
-                        placeholderTextColor="#8b9cb5"
-                        editable={false}
+                    <View>
+                        <Text style={styles.inputTextStyle}>Image Uploaded by User</Text>
 
-                    >{this.state.ngoContact}</TextInput>
-                </View>}
-                {this.state.selectedNgo === '' ? null : <View style={[styles.SectionStyle, { height: null }]}>
-
-                    <TextInput
-                        style={styles.inputStyle}
-                        onChangeText={(ngoAdd) => this.setState({ ngoAdd: ngoAdd })}
-                        underlineColorAndroid="#f000"
-                        placeholderTextColor="#8b9cb5"
-                        editable={false}
-                        multiline
-                        numberOfLines={5}
-                    >{this.state.ngoAdd}</TextInput>
-                </View>}
-
-                <View>
-                    {this.state.image ? (
                         <Image
-                            source={{ uri: this.state.image }}
+                            source={{ uri: this.state.request.userImagePath }}
                             style={{
                                 width: '90%',
                                 height: height / 1.7,
@@ -406,14 +370,92 @@ export default class AddRequest extends Component<{}> {
                             }}
                             resizeMode={'stretch'}
                         />
-                    ) : null}
-                </View>
 
-                {this.state.image ?
-                    <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 5 }}>
+                    </View>
+
+                    {this.state.request.requestState === 'Processed' ?
+                        <View>
+                            <Text style={styles.inputStyle}>Image Uploaded by NGO:</Text>
+
+                            <Image
+                                source={{ uri: this.state.request.NGOImagePath }}
+                                style={{
+                                    width: '90%',
+                                    height: height / 1.7,
+                                    alignSelf: 'center'
+                                }}
+                                resizeMode={'stretch'}
+                            />
+
+                        </View>
+                        : null}
+
+                    {this.state.image ?
+                        <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 5 }}>
+                            <TouchableOpacity
+                                style={{
+                                    width: '45%',
+                                    padding: 6,
+                                    alignSelf: 'center',
+                                    backgroundColor: '#307ecc',
+                                    borderRadius: 6,
+                                    marginVertical: 8,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    backgroundColor: '#307ecc',
+                                    borderColor: '#307ecc',
+                                    borderWidth: 1,
+                                    shadowColor: '#ccc',
+                                    shadowOffset: {
+                                        width: 6,
+                                        height: 6,
+                                    },
+                                    shadowOpacity: 1,
+                                    shadowRadius: 3,
+                                    elevation: 3,
+                                }}
+                                onPress={() => { this.setState({ showChooseImageModal: true }) }}
+                            >
+                                <Text style={{
+                                    fontSize: 15,
+                                    color: '#FFF'
+                                }}>{"Change Image"}</Text>
+                            </TouchableOpacity>
+                            <TouchableOpacity
+                                style={{
+                                    width: '45%',
+                                    padding: 6,
+                                    alignSelf: 'center',
+                                    backgroundColor: '#307ecc',
+                                    borderRadius: 6,
+                                    marginVertical: 8,
+                                    justifyContent: 'center',
+                                    alignItems: 'center',
+                                    backgroundColor: '#307ecc',
+                                    borderColor: '#307ecc',
+                                    borderWidth: 1,
+                                    shadowColor: '#ccc',
+                                    shadowOffset: {
+                                        width: 6,
+                                        height: 6,
+                                    },
+                                    shadowOpacity: 1,
+                                    shadowRadius: 3,
+                                    elevation: 3,
+                                }}
+                                onPress={() => { this.handleSubmitButton() }}
+                            >
+                                <Text style={{
+                                    fontSize: 15,
+                                    color: '#FFF'
+                                }}>{"Save Request"}</Text>
+                            </TouchableOpacity>
+                        </View>
+                        :
+
                         <TouchableOpacity
                             style={{
-                                width: '45%',
+                                width: '60%',
                                 padding: 6,
                                 alignSelf: 'center',
                                 backgroundColor: '#307ecc',
@@ -438,121 +480,61 @@ export default class AddRequest extends Component<{}> {
                             <Text style={{
                                 fontSize: 15,
                                 color: '#FFF'
-                            }}>{"Change Image"}</Text>
+                            }}>{"Add Image of food"}</Text>
                         </TouchableOpacity>
-                        <TouchableOpacity
-                            style={{
-                                width: '45%',
-                                padding: 6,
-                                alignSelf: 'center',
-                                backgroundColor: '#307ecc',
-                                borderRadius: 6,
-                                marginVertical: 8,
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                backgroundColor: '#307ecc',
-                                borderColor: '#307ecc',
-                                borderWidth: 1,
-                                shadowColor: '#ccc',
-                                shadowOffset: {
-                                    width: 6,
-                                    height: 6,
-                                },
-                                shadowOpacity: 1,
-                                shadowRadius: 3,
-                                elevation: 3,
-                            }}
-                            onPress={() => { this.handleSubmitButton() }}
-                        >
-                            <Text style={{
-                                fontSize: 15,
-                                color: '#FFF'
-                            }}>{"Submit Request"}</Text>
-                        </TouchableOpacity>
-                    </View>
-                    :
-
-                    <TouchableOpacity
-                        style={{
-                            width: '60%',
-                            padding: 6,
-                            alignSelf: 'center',
-                            backgroundColor: '#307ecc',
-                            borderRadius: 6,
-                            marginVertical: 8,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: '#307ecc',
-                            borderColor: '#307ecc',
-                            borderWidth: 1,
-                            shadowColor: '#ccc',
-                            shadowOffset: {
-                                width: 6,
-                                height: 6,
-                            },
-                            shadowOpacity: 1,
-                            shadowRadius: 3,
-                            elevation: 3,
-                        }}
-                        onPress={() => { this.setState({ showChooseImageModal: true }) }}
+                    }
+                    <Modal
+                        animationType="none"
+                        transparent={true}
+                        style={{ flex: 1, margin: 0 }}
+                        visible={this.state.showChooseImageModal}
+                        onRequestClose={() => { this.setState({ showChooseImageModal: false }) }}
                     >
-                        <Text style={{
-                            fontSize: 15,
-                            color: '#FFF'
-                        }}>{"Add Image of food"}</Text>
-                    </TouchableOpacity>
-                }
-                <Modal
-                    animationType="none"
-                    transparent={true}
-                    style={{ flex: 1, margin: 0 }}
-                    visible={this.state.showChooseImageModal}
-                    onRequestClose={() => { this.setState({ showChooseImageModal: false }) }}
-                >
-                    <ModalBox
-                        position={'center'}
-                        isOpen={this.state.showChooseImageModal}
-                        style={styles.postImageModal}
-                        ref={'modal1'}
-                        swipeToClose={this.state.swipeToClose}
-                        onClosed={() => { this.setState({ showChooseImageModal: false }) }}
-                        onOpened={this.onOpen}
-                        onClosingState={() => { this.setState({ showChooseImageModal: false }) }}>
+                        <ModalBox
+                            position={'center'}
+                            isOpen={this.state.showChooseImageModal}
+                            style={styles.postImageModal}
+                            ref={'modal1'}
+                            swipeToClose={this.state.swipeToClose}
+                            onClosed={() => { this.setState({ showChooseImageModal: false }) }}
+                            onOpened={this.onOpen}
+                            onClosingState={() => { this.setState({ showChooseImageModal: false }) }}>
 
-                        <Text style={styles.postImageModalTitleText}>{'Choose Image'}</Text>
+                            <Text style={styles.postImageModalTitleText}>{'Choose Image'}</Text>
 
-                        <TouchableOpacity
-                            onPress={() => this.openCamera()}
-                            style={styles.postImageModalItemContainer}>
-                            {/* <Image
+                            <TouchableOpacity
+                                onPress={() => this.openCamera()}
+                                style={styles.postImageModalItemContainer}>
+                                {/* <Image
                                 style={styles.image25}
                                 source={require('../image/cameraIcon.png')}
                                 resizeMode={"contain"}
                             /> */}
-                            <Text style={styles.postImageItemText}>Camera</Text>
+                                <Text style={styles.postImageItemText}>Camera</Text>
 
-                        </TouchableOpacity>
+                            </TouchableOpacity>
 
 
-                        <View style={styles.postImageItemSeparator}>
-                        </View>
-                        <TouchableOpacity
-                            onPress={() => this.openGallery()}
-                            style={styles.postImageModalItemContainer}>
-                            {/* <Image
+                            <View style={styles.postImageItemSeparator}>
+                            </View>
+                            <TouchableOpacity
+                                onPress={() => this.openGallery()}
+                                style={styles.postImageModalItemContainer}>
+                                {/* <Image
                                 style={styles.image25}
                                 source={require('../image/galleryIcon.png')}
                                 resizeMode={"contain"}
                             /> */}
-                            <Text style={styles.postImageItemText}>Pickup from gallery</Text>
+                                <Text style={styles.postImageItemText}>Pickup from gallery</Text>
 
-                        </TouchableOpacity>
-                        <View>
-                            <Text onPress={() => this.setState({ showChooseImageModal: false })} style={styles.postImageModalCancelText}>Cancel</Text>
-                        </View>
-                    </ModalBox>
-                </Modal>
-            </ScrollView> :
+                            </TouchableOpacity>
+                            <View>
+                                <Text onPress={() => this.setState({ showChooseImageModal: false })} style={styles.postImageModalCancelText}>Cancel</Text>
+                            </View>
+                        </ModalBox>
+                    </Modal>
+                </ScrollView>
+                :
                 <View
                     style={{
                         flex: 1,
@@ -601,10 +583,11 @@ export default class AddRequest extends Component<{}> {
 const styles = StyleSheet.create({
     SectionStyle: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         height: 40,
         marginTop: 20,
-        marginLeft: 35,
-        marginRight: 35,
+        marginLeft: 10,
+        marginRight: 10,
         margin: 10,
     },
     buttonStyle: {
@@ -634,6 +617,11 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 30,
         borderColor: '#dadae8',
+    },
+    inputTextStyle: {
+        flex: 1,
+        color: '#333',
+        alignSelf: 'center'
     },
     errorTextStyle: {
         color: 'red',

@@ -14,6 +14,8 @@ import RegisterScreen from '../Screen/RegisterScreen';
 import SettingsScreen from '../Screen/SettingScreen';
 import HomeScreen from '../Screen/HomeScreen';
 import AddRequest from '../Screen/AddRequest';
+import ViewRequestUser from '../Screen/ViewRequestUser'
+import ViewRequestNGO from '../Screen/ViewRequestNGO'
 
 const window = Dimensions.get("screen");
 
@@ -46,9 +48,25 @@ const AppNavigator = createStackNavigator(
         },
       }
     },
+    viewRequestUser: {
+      screen: ViewRequestUser, navigationOptions: {
+        headerTitle: "View Request",
+        headerStyle: {
+          backgroundColor: '#fff', //Set Header color
+        },
+      }
+    },
     addrequest: {
       screen: AddRequest, navigationOptions: {
         headerTitle: "Add Request",
+        headerStyle: {
+          backgroundColor: '#fff', //Set Header color
+        },
+      }
+    },
+    viewRequestNGO: {
+      screen: ViewRequestNGO, navigationOptions: {
+        headerTitle: "View Request",
         headerStyle: {
           backgroundColor: '#fff', //Set Header color
         },
