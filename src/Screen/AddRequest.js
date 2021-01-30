@@ -99,7 +99,7 @@ export default class AddRequest extends Component<{}> {
         AsyncStorage.getItem('userObject')
             .then(userObject => {
                 this.setState({
-                    userObject: userObject
+                    userObject: JSON.parse(userObject)
                 })
                 AsyncStorage.getItem('allUsers')
                     .then(userArr => {
@@ -151,8 +151,7 @@ export default class AddRequest extends Component<{}> {
             NGOEmail: this.state.selectedNgoObj.user_email,
             userEmail: this.state.userObject.user_email,
             userName: this.state.userObject.user_name,
-            userContact: this.state.userObject.user_mob,
-            userAdd: this.state.userObject.user_address,
+            ngoName: this.state.selectedNgoObj.user_name,
             userImagePath: this.state.image,
             NGOImagePath: '',
             requestState: 'Pending',
@@ -587,7 +586,7 @@ export default class AddRequest extends Component<{}> {
                             elevation: 3,
                         }}
                         activeOpacity={0.5}
-                        onPress={() => this.props.navigation.push('dashboard')}>
+                        onPress={() => this.props.navigation.goBack()}>
                         <Text style={styles.buttonTextStyle}>Okay</Text>
                     </TouchableOpacity>
                 </View>

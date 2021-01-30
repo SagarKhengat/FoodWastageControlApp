@@ -52,7 +52,7 @@ class ListItem extends Component {
                   <Text style={styles.cardDetailText}>{item.foodAmount}</Text>
                 </View>
                 <View>
-                  <Text style={styles.cardDetailText}>{'Submitted By: '}{item.userName ? item.userName : ''}</Text>
+                  <Text style={styles.cardDetailText}>{this.props.isNGO ? `Submitted By: ${item.userName}` : `Submitted To: ${item.ngoName}`}</Text>
                 </View>
                 <View>
                   <Text style={styles.cardDetailText}>{'Status: '}{item.requestState === 'Pending' ? <Text style={[styles.cardDetailText, { color: '#307ecc' }]}>{'Pending'}</Text> : item.requestState === 'Processed' ? <Text style={[styles.cardDetailText, { color: 'green' }]}>{'Processed'}</Text> : <Text style={[styles.cardDetailText, { color: 'red' }]}>{'Declined'}</Text>}</Text>
@@ -72,7 +72,9 @@ export default class HomeScreen extends Component<{}> {
     super(props);
     this.state = {
       data: [],
-      isLoading: false
+      isLoading: false,
+      isNGO: false,
+      userObject: null
     };
   }
 
@@ -103,31 +105,39 @@ export default class HomeScreen extends Component<{}> {
       AsyncStorage.getItem('userObject')
         .then(userObject => {
           this.setState({
-            userObject: userObject
-          })
-          AsyncStorage.getItem('allRequests')
-            .then(allRequests => {
-              if (allRequests) {
-                var requests = JSON.parse(allRequests);
-                console.log(">>>>>>>>>>>>>", requests)
-                for (let index = 0; index < requests.length; index++) {
-                  const element = requests[index];
-                  if (userObject.user_type === 'NGO') {
-                    if (element.NGOEmail === userObject.user_email) {
-                      arr.push(element)
-                    }
-                  } else {
-                    if (element.userEmail === userObject.user_email) {
-                      arr.push(element)
+            userObject: JSON.parse(userObject),
+            isNGO: JSON.parse(userObject).user_type === 'NGO' ? true : false
+          }, () => {
+            AsyncStorage.getItem('allRequests')
+              .then(allRequests => {
+
+                if (allRequests) {
+                  var requests = JSON.parse(allRequests);
+                  for (let index = 0; index < requests.length; index++) {
+                    const element = requests[index];
+                    if (this.state.userObject.user_type === 'NGO') {
+                      if (element.NGOEmail === this.state.userObject.user_email) {
+                        arr.push(element)
+                      }
+                    } else {
+                      if (element.userEmail === this.state.userObject.user_email) {
+                        arr.push(element)
+                      }
                     }
                   }
+                  arr.sort(function compare(a, b) {
+                    var dateA = new Date(a.dateTime);
+                    var dateB = new Date(b.dateTime);
+                    return dateB - dateA;
+                  });
+                  this.setState({
+                    data: arr
+                  })
                 }
-                this.setState({
-                  data: arr
-                })
-              }
 
-            });
+              });
+          })
+
 
         });
     });
@@ -143,6 +153,7 @@ export default class HomeScreen extends Component<{}> {
         item={item}
         index={index}
         onPressItem={this._onPressItem}
+        isNGO={this.state.isNGO}
       />
     );
 
@@ -151,7 +162,11 @@ export default class HomeScreen extends Component<{}> {
 
 
   _onPressItem = (item) => {
-    this.props.navigation.navigate('viewRequestUser', { request: item })
+    if (this.state.isNGO) {
+      this.props.navigation.navigate('viewRequestNGO', { request: item })
+    } else {
+      this.props.navigation.navigate('viewRequestUser', { request: item })
+    }
   };
 
 
@@ -177,7 +192,7 @@ export default class HomeScreen extends Component<{}> {
             </View>
             : null}
         />
-        <TouchableOpacity
+        {!this.state.isNGO ? <TouchableOpacity
           style={{
             width: '60%',
             padding: 12,
@@ -205,7 +220,7 @@ export default class HomeScreen extends Component<{}> {
             fontSize: 18,
             color: '#FFF'
           }}>{"Add a Request"}</Text>
-        </TouchableOpacity>
+        </TouchableOpacity> : null}
       </View>
 
 

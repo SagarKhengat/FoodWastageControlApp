@@ -46,7 +46,7 @@ const LoginScreen = ({ navigation }) => {
           for (let index = 0; index < users.length; index++) {
             const element = users[index];
 
-            if (element.user_email === dataToSend.user_email && element.user_password === dataToSend.user_password) {
+            if (element.user_email.toLowerCase() === dataToSend.user_email.toLowerCase() && element.user_password === dataToSend.user_password) {
               AsyncStorage.setItem('userObject', JSON.stringify(element)).then(() => {
                 setLoading(false);
                 navigation.replace('dashboard');

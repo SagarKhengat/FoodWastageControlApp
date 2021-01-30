@@ -186,7 +186,7 @@ export default class ViewRequestUser extends Component<{}> {
 
                 {this.state.request.requestState === 'Processed' ?
                     <View>
-                        <Text style={styles.inputStyle}>Image Uploaded by NGO:</Text>
+                        <Text style={styles.inputTextStyle}>Image Uploaded by NGO:</Text>
 
                         <Image
                             source={{ uri: this.state.request.NGOImagePath }}
@@ -280,7 +280,8 @@ const styles = StyleSheet.create({
     inputTextStyle: {
         flex: 1,
         color: '#333',
-        alignSelf: 'center'
+        alignSelf: 'center',
+        marginVertical: 5
     },
     errorTextStyle: {
         color: 'red',

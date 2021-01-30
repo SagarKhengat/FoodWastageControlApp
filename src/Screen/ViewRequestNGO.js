@@ -72,95 +72,40 @@ export default class ViewRequestNGO extends Component<{}> {
     constructor(props) {
         super(props);
         this.state = {
-            data: [],
-            isLoading: false,
-            selectedEventType: '',
-            image: null,
-            showChooseImageModal: false,
-            userObject: null,
-            ngoEmail: '',
-            ngoContact: '',
-            ngoAdd: '',
-            selectedNgo: '',
-            ngoArr: [],
-            originalNgoArr: [],
-            foodname: '',
-            foodamount: '',
+            request: this.props.navigation.state.params.request,
+            User: null,
             success: false,
-            selectedNgoObj: {}
+            showChooseImageModal: false,
+            action: null
         };
     }
 
 
 
     componentDidMount() {
-        var arr = [];
-        var arr1 = [];
-        AsyncStorage.getItem('userObject')
-            .then(userObject => {
-                this.setState({
-                    userObject: userObject
-                })
-                AsyncStorage.getItem('allUsers')
-                    .then(userArr => {
-                        if (userArr) {
-                            var users = JSON.parse(userArr);
-                            for (let index = 0; index < users.length; index++) {
-                                const element = users[index];
-                                if (element.user_type === 'NGO') {
-                                    arr.push(element);
-                                    arr1.push({ value: element.user_name })
-
-                                }
-
-                            }
-                            this.setState({
-                                originalNgoArr: arr,
-                                ngoArr: arr1
-                            })
+        AsyncStorage.getItem('allUsers')
+            .then(userArr => {
+                if (userArr) {
+                    var users = JSON.parse(userArr);
+                    for (let index = 0; index < users.length; index++) {
+                        const element = users[index];
+                        if (element.user_type === 'Individual' && element.user_email === this.props.navigation.state.params.request.userEmail) {
+                            this.setState({ User: element })
                         }
 
-                    });
+                    }
+
+                }
 
             });
-
     }
 
-    handleSubmitButton = () => {
-        if (this.state.foodname === '') {
-            alert('Please fill food name');
-            return;
-        }
-        if (this.state.foodamount === '') {
-            alert('Please fill amount of food to be donated');
-            return;
-        }
-        if (this.state.selectedEventType === '') {
-            alert('Please select event type');
-            return;
-        }
-        if (this.state.image === '') {
+    handleSubmitAction = (action) => {
+        if (this.state.action === 'Processed' && this.state.request.NGOImagePath === '') {
             alert('Please add image');
             return;
         }
-        if (this.state.selectedNgo === '') {
-            alert('Please select NGO');
-            return;
-        }
-        var dataToSend = {
-            NGOEmail: this.state.selectedNgoObj.user_email,
-            userEmail: this.state.userObject.user_email,
-            userName: this.state.userObject.user_name,
-            userContact: this.state.userObject.user_mob,
-            userAdd: this.state.userObject.user_address,
-            userImagePath: this.state.image,
-            NGOImagePath: '',
-            requestState: 'Pending',
-            eventType: this.state.selectedEventType,
-            foodName: this.state.foodname,
-            foodAmount: this.state.foodamount,
-            dateTime: new Date(),
-        };
+
         var arr = [];
 
         AsyncStorage.getItem('allRequests')
@@ -168,18 +113,21 @@ export default class ViewRequestNGO extends Component<{}> {
                 if (allRequests) {
                     var requests = JSON.parse(allRequests);
                     arr = requests;
-                    arr.push(dataToSend);
+                    for (let index = 0; index < arr.length; index++) {
+                        const element = arr[index];
+                        if (element.ngoEmail === this.state.request.ngoEmail &&
+                            element.userEmail === this.state.request.userEmail &&
+                            element.dateTime === this.state.request.dateTime &&
+                            element.userImagePath === this.state.request.userImagePath) {
+                            arr[index].requestState = action;
+                            arr[index].NGOImagePath = this.state.request.NGOImagePath;
+                        }
+
+                    }
                     AsyncStorage.setItem('allRequests', JSON.stringify(arr)).then(() => {
                         this.setState({
-                            success: true
-                        })
-                    });
-                }
-                else {
-                    arr.push(dataToSend);
-                    AsyncStorage.setItem('allRequests', JSON.stringify(arr)).then(() => {
-                        this.setState({
-                            success: true
+                            success: true,
+                            action: action
                         })
                     });
                 }
@@ -193,8 +141,12 @@ export default class ViewRequestNGO extends Component<{}> {
             const newFilepath = `${dirPicutures}/${newImageName}`;
             // move and save image to new filepath
             const imageMoved = await moveAttachment(filePath, newFilepath);
+            var obj = this.state.request
+            obj.NGOImagePath = 'file://' + imageMoved;
             this.setState({
-                image: 'file://' + imageMoved
+                request: obj
+            }, () => {
+                console.log(">>>>>>>>>>>>>>", this.state.request.NGOImagePath)
             })
             console.log('image moved', imageMoved);
         } catch (error) {
@@ -260,9 +212,8 @@ export default class ViewRequestNGO extends Component<{}> {
     render = () => {
 
         return (
-
-            !this.state.success ?
-                <ScrollView style={{ flex: 1, backgroundColor: '#efece8' }}>
+            <ScrollView style={{ flex: 1, backgroundColor: '#efece8' }}>
+                { !this.state.success ? <View>
                     <View style={[styles.SectionStyle]}>
                         <Text style={styles.inputTextStyle}>Request Status:</Text>
                         <TextInput
@@ -320,8 +271,8 @@ export default class ViewRequestNGO extends Component<{}> {
                             editable={false}
                         >{moment(this.state.request.dateTime).format('DD-MMM-YYYY')}</TextInput>
                     </View>
-                    {this.state.NGO ? <View style={[styles.SectionStyle, { height: null }]}>
-                        <Text style={styles.inputTextStyle}>NGO Email:</Text>
+                    {this.state.User ? <View style={[styles.SectionStyle, { height: null }]}>
+                        <Text style={styles.inputTextStyle}>Enquirer Email:</Text>
                         <TextInput
                             style={styles.inputStyle}
                             onChangeText={(ngoEmail) => this.setState({ ngoEmail: ngoEmail })}
@@ -331,10 +282,10 @@ export default class ViewRequestNGO extends Component<{}> {
                             multiline
                             numberOfLines={2}
 
-                        >{this.state.NGO.user_email}</TextInput>
+                        >{this.state.User.user_email}</TextInput>
                     </View> : null}
-                    {this.state.NGO ? <View style={styles.SectionStyle}>
-                        <Text style={styles.inputTextStyle}>NGO Mob No:</Text>
+                    {this.state.User ? <View style={styles.SectionStyle}>
+                        <Text style={styles.inputTextStyle}>Enquirer Mob No:</Text>
 
                         <TextInput
                             style={styles.inputStyle}
@@ -343,10 +294,10 @@ export default class ViewRequestNGO extends Component<{}> {
                             placeholderTextColor="#8b9cb5"
                             editable={false}
 
-                        >{this.state.NGO.user_mob}</TextInput>
+                        >{this.state.User.user_mob}</TextInput>
                     </View> : null}
-                    {this.state.NGO ? <View style={[styles.SectionStyle, { height: null }]}>
-                        <Text style={styles.inputTextStyle}>NGO Addr:</Text>
+                    {this.state.User ? <View style={[styles.SectionStyle, { height: null }]}>
+                        <Text style={styles.inputTextStyle}>Enquirer Addr:</Text>
                         <TextInput
                             style={styles.inputStyle}
                             onChangeText={(ngoAdd) => this.setState({ ngoAdd: ngoAdd })}
@@ -355,11 +306,11 @@ export default class ViewRequestNGO extends Component<{}> {
                             editable={false}
                             multiline
                             numberOfLines={5}
-                        >{this.state.NGO.user_address}</TextInput>
+                        >{this.state.User.user_address}</TextInput>
                     </View> : null}
 
                     <View>
-                        <Text style={styles.inputTextStyle}>Image Uploaded by User</Text>
+                        <Text style={styles.inputTextStyle}>Image Uploaded by Enquirer</Text>
 
                         <Image
                             source={{ uri: this.state.request.userImagePath }}
@@ -373,9 +324,9 @@ export default class ViewRequestNGO extends Component<{}> {
 
                     </View>
 
-                    {this.state.request.requestState === 'Processed' ?
+                    {this.state.request.NGOImagePath !== '' ?
                         <View>
-                            <Text style={styles.inputStyle}>Image Uploaded by NGO:</Text>
+                            <Text style={styles.inputTextStyle}>Image Uploaded by NGO</Text>
 
                             <Image
                                 source={{ uri: this.state.request.NGOImagePath }}
@@ -389,9 +340,67 @@ export default class ViewRequestNGO extends Component<{}> {
 
                         </View>
                         : null}
-
-                    {this.state.image ?
+                    {this.state.request.requestState === 'Pending' ?
                         <View style={{ width: '100%', flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', paddingHorizontal: 5 }}>
+                            {this.state.request.NGOImagePath === '' ?
+                                <TouchableOpacity
+                                    style={{
+                                        width: '45%',
+                                        padding: 6,
+                                        alignSelf: 'center',
+                                        backgroundColor: '#307ecc',
+                                        borderRadius: 6,
+                                        marginVertical: 8,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        backgroundColor: '#307ecc',
+                                        borderColor: '#307ecc',
+                                        borderWidth: 1,
+                                        shadowColor: '#ccc',
+                                        shadowOffset: {
+                                            width: 6,
+                                            height: 6,
+                                        },
+                                        shadowOpacity: 1,
+                                        shadowRadius: 3,
+                                        elevation: 3,
+                                    }}
+                                    onPress={() => { this.setState({ showChooseImageModal: true }) }}
+                                >
+                                    <Text style={{
+                                        fontSize: 15,
+                                        color: '#FFF'
+                                    }}>{"Add Image"}</Text>
+                                </TouchableOpacity>
+                                : <TouchableOpacity
+                                    style={{
+                                        width: '45%',
+                                        padding: 6,
+                                        alignSelf: 'center',
+                                        backgroundColor: '#307ecc',
+                                        borderRadius: 6,
+                                        marginVertical: 8,
+                                        justifyContent: 'center',
+                                        alignItems: 'center',
+                                        backgroundColor: '#307ecc',
+                                        borderColor: '#307ecc',
+                                        borderWidth: 1,
+                                        shadowColor: '#ccc',
+                                        shadowOffset: {
+                                            width: 6,
+                                            height: 6,
+                                        },
+                                        shadowOpacity: 1,
+                                        shadowRadius: 3,
+                                        elevation: 3,
+                                    }}
+                                    onPress={() => { this.handleSubmitAction('Processed') }}
+                                >
+                                    <Text style={{
+                                        fontSize: 15,
+                                        color: '#FFF'
+                                    }}>{"Process"}</Text>
+                                </TouchableOpacity>}
                             <TouchableOpacity
                                 style={{
                                     width: '45%',
@@ -414,45 +423,14 @@ export default class ViewRequestNGO extends Component<{}> {
                                     shadowRadius: 3,
                                     elevation: 3,
                                 }}
-                                onPress={() => { this.setState({ showChooseImageModal: true }) }}
+                                onPress={() => { this.handleSubmitAction('Declined') }}
                             >
                                 <Text style={{
                                     fontSize: 15,
                                     color: '#FFF'
-                                }}>{"Change Image"}</Text>
+                                }}>{"Decline Request"}</Text>
                             </TouchableOpacity>
-                            <TouchableOpacity
-                                style={{
-                                    width: '45%',
-                                    padding: 6,
-                                    alignSelf: 'center',
-                                    backgroundColor: '#307ecc',
-                                    borderRadius: 6,
-                                    marginVertical: 8,
-                                    justifyContent: 'center',
-                                    alignItems: 'center',
-                                    backgroundColor: '#307ecc',
-                                    borderColor: '#307ecc',
-                                    borderWidth: 1,
-                                    shadowColor: '#ccc',
-                                    shadowOffset: {
-                                        width: 6,
-                                        height: 6,
-                                    },
-                                    shadowOpacity: 1,
-                                    shadowRadius: 3,
-                                    elevation: 3,
-                                }}
-                                onPress={() => { this.handleSubmitButton() }}
-                            >
-                                <Text style={{
-                                    fontSize: 15,
-                                    color: '#FFF'
-                                }}>{"Save Request"}</Text>
-                            </TouchableOpacity>
-                        </View>
-                        :
-
+                        </View> :
                         <TouchableOpacity
                             style={{
                                 width: '60%',
@@ -475,14 +453,13 @@ export default class ViewRequestNGO extends Component<{}> {
                                 shadowRadius: 3,
                                 elevation: 3,
                             }}
-                            onPress={() => { this.setState({ showChooseImageModal: true }) }}
+                            onPress={() => { this.props.navigation.goBack() }}
                         >
                             <Text style={{
                                 fontSize: 15,
                                 color: '#FFF'
-                            }}>{"Add Image of food"}</Text>
-                        </TouchableOpacity>
-                    }
+                            }}>{'Back'}</Text>
+                        </TouchableOpacity>}
                     <Modal
                         animationType="none"
                         transparent={true}
@@ -533,46 +510,48 @@ export default class ViewRequestNGO extends Component<{}> {
                             </View>
                         </ModalBox>
                     </Modal>
-                </ScrollView>
-                :
-                <View
-                    style={{
-                        flex: 1,
-                        backgroundColor: '#efece8',
-                        justifyContent: 'center',
-                    }}>
-                    <Image
-                        source={require('../Image/success.png')}
-                        style={{ height: 150, resizeMode: 'contain', alignSelf: 'center' }}
-                    />
-                    <Text style={styles.successTextStyle}>Request submitted successfully.</Text>
-                    <TouchableOpacity
-                        style={{
-                            width: '60%',
-                            padding: 6,
-                            alignSelf: 'center',
-                            backgroundColor: '#307ecc',
-                            borderRadius: 6,
-                            marginVertical: 8,
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            backgroundColor: '#307ecc',
-                            borderColor: '#307ecc',
-                            borderWidth: 1,
-                            shadowColor: '#ccc',
-                            shadowOffset: {
-                                width: 6,
-                                height: 6,
-                            },
-                            shadowOpacity: 1,
-                            shadowRadius: 3,
-                            elevation: 3,
-                        }}
-                        activeOpacity={0.5}
-                        onPress={() => this.props.navigation.push('dashboard')}>
-                        <Text style={styles.buttonTextStyle}>Okay</Text>
-                    </TouchableOpacity>
                 </View>
+                    :
+                    <View
+                        style={{
+                            flex: 1,
+                            backgroundColor: '#efece8',
+                            justifyContent: 'center',
+                        }}>
+                        <Image
+                            source={require('../Image/success.png')}
+                            style={{ height: 150, resizeMode: 'contain', alignSelf: 'center' }}
+                        />
+                        <Text style={styles.successTextStyle}>{`Request ${this.state.action} successfully.`}</Text>
+                        <TouchableOpacity
+                            style={{
+                                width: '60%',
+                                padding: 6,
+                                alignSelf: 'center',
+                                backgroundColor: '#307ecc',
+                                borderRadius: 6,
+                                marginVertical: 8,
+                                justifyContent: 'center',
+                                alignItems: 'center',
+                                backgroundColor: '#307ecc',
+                                borderColor: '#307ecc',
+                                borderWidth: 1,
+                                shadowColor: '#ccc',
+                                shadowOffset: {
+                                    width: 6,
+                                    height: 6,
+                                },
+                                shadowOpacity: 1,
+                                shadowRadius: 3,
+                                elevation: 3,
+                            }}
+                            activeOpacity={0.5}
+                            onPress={() => this.props.navigation.goBack()}>
+                            <Text style={styles.buttonTextStyle}>Okay</Text>
+                        </TouchableOpacity>
+                    </View>
+                }
+            </ScrollView>
 
 
         );
@@ -621,7 +600,9 @@ const styles = StyleSheet.create({
     inputTextStyle: {
         flex: 1,
         color: '#333',
-        alignSelf: 'center'
+
+        alignSelf: 'center',
+        marginVertical: 5,
     },
     errorTextStyle: {
         color: 'red',
