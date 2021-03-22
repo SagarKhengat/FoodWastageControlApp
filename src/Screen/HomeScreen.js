@@ -177,7 +177,7 @@ export default class HomeScreen extends Component<{}> {
 
     return (
 
-      <View style={{ flex: 1, backgroundColor: '#efece8' }}>
+      <View style={{ flex: 1, backgroundColor: '#F7F7A7' }}>
         <FlatList
           data={this.state.data}
           keyExtractor={this._keyExtractor}

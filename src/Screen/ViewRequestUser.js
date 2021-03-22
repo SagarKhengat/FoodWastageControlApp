@@ -73,7 +73,7 @@ export default class ViewRequestUser extends Component<{}> {
 
         return (
 
-            <ScrollView style={{ flex: 1, backgroundColor: '#efece8' }}>
+            <ScrollView style={{ flex: 1, backgroundColor: '#F7F7A7' }}>
                 <View style={[styles.SectionStyle]}>
                     <Text style={styles.inputTextStyle}>Request Status:</Text>
                     <TextInput
@@ -100,7 +100,7 @@ export default class ViewRequestUser extends Component<{}> {
                     >{this.state.request.eventType}</TextInput>
                 </View>
                 <View style={[styles.SectionStyle, { height: null }]}>
-                    <Text style={styles.inputTextStyle}>Food Name:</Text>
+                    <Text style={styles.inputTextStyle}>Goods Name:</Text>
                     <TextInput
                         style={styles.inputStyle}
                         onChangeText={(foodname) => this.setState({ foodname: foodname })}
@@ -112,7 +112,7 @@ export default class ViewRequestUser extends Component<{}> {
                     >{this.state.request.foodName}</TextInput>
                 </View>
                 <View style={styles.SectionStyle}>
-                    <Text style={styles.inputTextStyle}>Food Amount:</Text>
+                    <Text style={styles.inputTextStyle}>Goods Amount:</Text>
                     <TextInput
                         style={styles.inputStyle}
                         onChangeText={(foodamount) => this.setState({ foodamount: foodamount })}

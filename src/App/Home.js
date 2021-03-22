@@ -27,8 +27,8 @@ class Home extends Component {
     return (
       <View style={{ backgroundColor: '#FFF' }}>
         <Image
-          source={require('../Image/Reducingfood.png')}
-          style={{ width: '90%', resizeMode: 'contain', alignSelf: 'center' }}
+          source={require('../Image/Reducingfood.jpg')}
+          style={{ width: '90%', height: '100%', alignSelf: 'center' }}
         />
       </View>
     );

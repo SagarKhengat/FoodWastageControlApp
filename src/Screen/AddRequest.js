@@ -128,15 +128,15 @@ export default class AddRequest extends Component<{}> {
 
     handleSubmitButton = () => {
         if (this.state.foodname === '') {
-            alert('Please fill food name');
+            alert('Please fill goods name');
             return;
         }
         if (this.state.foodamount === '') {
-            alert('Please fill amount of food to be donated');
+            alert('Please fill amount of goods to be donated');
             return;
         }
         if (this.state.selectedEventType === '') {
-            alert('Please select event type');
+            alert('Please select goods type');
             return;
         }
         if (this.state.image === '') {
@@ -260,7 +260,7 @@ export default class AddRequest extends Component<{}> {
 
         return (
 
-            !this.state.success ? <ScrollView style={{ flex: 1, backgroundColor: '#efece8' }}>
+            !this.state.success ? <ScrollView style={{ flex: 1, backgroundColor: '#F7F7A7' }}>
 
                 <View style={[{
                     alignSelf: 'center',
@@ -277,7 +277,7 @@ export default class AddRequest extends Component<{}> {
                         labelTextStyle={{ color: '#333' }}
                         fontSize={14}
                         baseColor={'#333'}
-                        label='Select Event Type'
+                        label='Select Goods Type'
                         value={this.state.selectedEventType}
                         onChangeText={(selectedEventType) => {
                             this.setState({
@@ -286,17 +286,17 @@ export default class AddRequest extends Component<{}> {
                         }}
                         data={[
                             {
-                                value: 'NORMAL PARTY',
+                                value: 'Food',
                             }, {
-                                value: 'BIRTHDAY PARTY',
+                                value: 'Cloths',
                             },
                             {
-                                value: 'CULTURAL EVENT',
+                                value: 'Toys',
                             }, {
-                                value: 'WEDDING CEREMONY',
+                                value: 'Stationary',
                             },
                             {
-                                value: 'INOGORATION',
+                                value: 'Grains',
                             }
                         ]}
                     />
@@ -307,7 +307,7 @@ export default class AddRequest extends Component<{}> {
                         style={styles.inputStyle}
                         onChangeText={(foodname) => this.setState({ foodname: foodname })}
                         underlineColorAndroid="#f000"
-                        placeholder="Enter food to be denoted"
+                        placeholder="Enter goods to be denoted"
                         placeholderTextColor="#8b9cb5"
                     />
                 </View>
@@ -317,7 +317,7 @@ export default class AddRequest extends Component<{}> {
                         style={styles.inputStyle}
                         onChangeText={(foodamount) => this.setState({ foodamount: foodamount })}
                         underlineColorAndroid="#f000"
-                        placeholder="Enter amount of food"
+                        placeholder="Enter amount of goods"
                         placeholderTextColor="#8b9cb5"
                     />
                 </View>
@@ -498,7 +498,7 @@ export default class AddRequest extends Component<{}> {
                         <Text style={{
                             fontSize: 15,
                             color: '#FFF'
-                        }}>{"Add Image of food"}</Text>
+                        }}>{"Add Image of goods"}</Text>
                     </TouchableOpacity>
                 }
                 <Modal
@@ -555,7 +555,7 @@ export default class AddRequest extends Component<{}> {
                 <View
                     style={{
                         flex: 1,
-                        backgroundColor: '#efece8',
+                        backgroundColor: '#F7F7A7',
                         justifyContent: 'center',
                     }}>
                     <Image

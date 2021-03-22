@@ -27,7 +27,8 @@ const SplashScreen = ({ navigation }) => {
     <View style={styles.container}>
       <Image
         source={require('../Image/Reducingfood.png')}
-        style={{ width: '90%', margin: 30 }}
+        style={{ width: '90%', margin: 30, }}
+        resizeMode={'contain'}
       />
       <ActivityIndicator
         animating={animating}
@@ -44,9 +45,10 @@ export default SplashScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
     backgroundColor: '#fff',
-    height: '100%'
+    height: 30,
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   activityIndicator: {
     alignItems: 'center',

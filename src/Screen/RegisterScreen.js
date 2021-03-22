@@ -134,7 +134,7 @@ const RegisterScreen = (props) => {
         }}>
         <View style={{ alignItems: 'center' }}>
           <Image
-            source={require('../Image/reducefoodwaste.png')}
+            source={require('../Image/reducefoodwaste.jpg')}
             style={{
               width: '50%',
               height: 100,
