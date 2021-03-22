@@ -19,6 +19,7 @@
   <androidx.browser/>
   <androidx.camera/>
   <androidx.car/>
+  <androidx.car.app/>
   <androidx.cardview/>
   <androidx.collection/>
   <androidx.compose/>
@@ -125,6 +126,7 @@
   <com.android.tools.build.jetifier/>
   <com.android.tools.chunkio/>
   <com.android.tools.ddms/>
+  <com.android.tools.emulator/>
   <com.android.tools.external.com-intellij/>
   <com.android.tools.external.org-jetbrains/>
   <com.android.tools.fakeadbserver/>
@@ -134,6 +136,7 @@
   <com.android.tools.metalava/>
   <com.android.tools.pixelprobe/>
   <com.android.tools.utp/>
+  <com.android.volley/>
   <com.crashlytics.sdk.android/>
   <com.google.ads.afsn/>
   <com.google.ads.interactivemedia.v3/>
@@ -141,6 +144,7 @@
   <com.google.android.ads.consent/>
   <com.google.android.apps.common.testing.accessibility.framework/>
   <com.google.android.datatransport/>
+  <com.google.android.fhir/>
   <com.google.android.games/>
   <com.google.android.gms/>
   <com.google.android.instantapps/>
